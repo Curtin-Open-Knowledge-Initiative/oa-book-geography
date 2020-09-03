@@ -4,7 +4,7 @@
 {% set case_study_countrytable = load_json(plot_figures.files["case_study_countrytable.json"].cache_filepath) %}
 {% set text_data = load_json(plot_figures.files["text_data.json"].cache_filepath) %}
 
-More Readers in More Places: The benefits of open access for scholarly books
+More readers in more places: The benefits of open access for scholarly books
 ============================================================================
 
 Alkim Ozaygen, Lucy Montgomery, Cameron Neylon, Chun-Kai (Karl) Huang, + Springer team
