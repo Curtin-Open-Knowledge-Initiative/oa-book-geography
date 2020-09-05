@@ -4,7 +4,7 @@
 {% set case_study_countrytable = load_json(plot_figures.files["case_study_countrytable.json"].cache_filepath) %}
 {% set text_data = load_json(plot_figures.files["text_data.json"].cache_filepath) %}
 
-More Readers in More Places: The benefits of open access for scholarly books
+More readers in more places: The benefits of open access for scholarly books
 ============================================================================
 
 Alkim Ozaygen, Lucy Montgomery, Cameron Neylon, Chun-Kai (Karl) Huang, + Springer team
@@ -24,13 +24,13 @@ Introduction
 
 Open access (OA) to scholarly outputs has taken the central stage in recent years, with numerous international, regional and local initiatives leading the way in advancing rapid changes to the publishing landscape. Yet, despite the high volume of research available on journal articles (and academic outputs in general), relatively little has focused on OA books. In particular, there is limited information on the level of online usage, their geographic distribution and, importantly, how usage may be influenced by publishing books in OA forms. 
 
-There are numerous potential proxies for measuring the usage of scholarly work. These include citations, downloads, website visits, social media mentions and their various forms. Through a randomised controlled trial, Davis, Simon & Connolly (2008) is able to show that OA articles have higher numbers of downloads and more unique web page visitors than non-OA articles. Wang et al. (2015) further finds that the increased level of downloads for OA articles is sustained over time. This is found in addition to OA articles attracting more social media attention. However, research also found the OA advantage of altmetric activities to have significant differences across disciplines. The citation advantage of OA publishing remains a hotly debated issue. Although, a recent literature review shows there is relatively more research in support of the OA advantage, with the caveat that there may be a large variability across disciplines.
+There are numerous potential proxies for measuring the usage of scholarly work. These include citations, downloads, website visits, social media mentions and their various forms. Through a randomised controlled trial, Davis, Simon & Connolly (2008) is able to show that OA articles have higher numbers of downloads and more unique web page visitors than non-OA articles<sup>1</sup>. Wang et al. (2015) further finds that the increased level of downloads for OA articles is sustained over time. This is found in addition to OA articles attracting more social media attention<sup>2</sup>. However, research also found the OA advantage of altmetric activities to have significant differences across disciplines<sup>3</sup>. The citation advantage of OA publishing remains a hotly debated issue. Although, a recent literature review shows there is relatively more research in support of the OA advantage, with the caveat that there may be a large variability across disciplines<sup>4</sup>.
 
-Most of the above findings have a strong focus on journal articles. Yet, it remains unclear whether these results can be generalised to books. In particular, there are significant differences between journal articles and books in terms of how they are hosted, shared and used online, and how they can be identified and tracked. These make the integration of usage data for books a challenging task. Counting Online Usage of Networked Electronic Resources (COUNTER) is an international effort to overcome some of these problems. It is a code of practice for compiling online usage statistics of electronic resources. Benchmarking book usage levels is another important aspect to consider. Books with different attributes (such as different languages and research fields) can have vastly different target audiences. Hence, the ability to compare books with similar attributes is essential for deep understandings of book usage.
+Most of the above findings have a strong focus on journal articles. Yet, it remains unclear whether these results can be generalised to books. In particular, there are significant differences between journal articles and books in terms of how they are hosted, shared and used online, and how they can be identified and tracked<sup>5</sup>. These make the integration of usage data for books a challenging task. Counting Online Usage of Networked Electronic Resources (COUNTER) is an international effort to overcome some of these problems. It is a code of practice for compiling online usage statistics of electronic resources<sup>6</sup>. Benchmarking book usage levels is another important aspect to consider. Books with different attributes (such as different languages and research fields) can have vastly different target audiences. Hence, the ability to compare books with similar attributes is essential for deep understandings of book usage.
 
-There is a limited amount of previous work comparing downloads of OA and non-OA books with the goal of understanding the impacts of OA on the geographies of usage. The work of Snjider (2013) showed increased usage for OA books as well as some evidence of an increase in sales. Using a sample of 180 books Snijder (2013) showed that OA led to increased proportions of usage in developing countries as well as demonstrating a “digital divide” in discovery and use. 
+There is a limited amount of previous work comparing downloads of OA and non-OA books with the goal of understanding the impacts of OA on the geographies of usage. The work of Snjider (2013) showed increased usage for OA books as well as some evidence of an increase in sales<sup>7</sup>. Using a sample of 180 books Snijder (2013) showed that OA led to increased proportions of usage in developing countries as well as demonstrating a “digital divide” in discovery and use. 
 
-This article, which extends the findings of Snijder (2013), provides a timely update to evidence-based arguments for the benefits of OA to scholarly books. Our analysis of a larger sample allows us to investigate these effects, particularly the geographic effects, in much greater detail. Using books available from a common source (i.e., Springer Nature) also alleviate some of the challenges discussed above. Having download data by month and various disciplines for all books allows us to confirm that downloads are higher for OA books across their whole history and across all disciplines. We also update analysis on the effects of OA across downloads, citations, and web visibility for a single large sample, following on the work undertaken by Springer Nature in 2017.
+This article, which extends the findings of Snijder (2013), provides a timely update to evidence-based arguments for the benefits of OA to scholarly books. Our analysis of a larger sample allows us to investigate these effects, particularly the geographic effects, in much greater detail. Using books available from a common source (i.e., Springer Nature) also alleviate some of the challenges discussed above. Having download data by month and various disciplines for all books allows us to confirm that downloads are higher for OA books across their whole history and across all disciplines. We also update analysis on the effects of OA across downloads, citations, and web visibility for a single large sample, following on the work undertaken by Springer Nature in 2017<sup>8</sup>.
 
 Main findings
 -------------
@@ -53,19 +53,18 @@ These findings are important for stakeholders by providing a robust understandin
 Data and methodology
 --------------------
 
-Springer Nature provided a set of 281 English-language OA titles published by its various imprints (e.g. Palgrave Macmillan, Springer, Birkhäuser) in 2015, 2016 and 2017. The titles were divided into three book types (“monographs”, “contributed volumes” and “briefs”); as well as five discipline clusters: “humanities”, “social sciences”, “business and economics”, “medical, biomedical and life sciences” and “physical sciences, engineering, mathematics and computer science”. Springer Nature also provided access to metadata relating to an additional 21,059 non-OA titles for the purposes of the study. Of the 21,059 non-OA books, a comparison set of {{text_data.num_closed }} 3,653 non-OA books was selected for closer analysis. The non-OA books were selected using a stratified random sampling procedure (stratified across combinations of book type, discipline cluster and year of publication) aimed at maximising statistical power of the sample and maintaining a consistent ratio of OA to non-OA books in each stratum.
+Springer Nature provided a set of 281 English-language OA titles published by its various imprints (e.g. Palgrave Macmillan, Springer, Birkhäuser) in 2015, 2016 and 2017. The titles were divided into three book types (“monographs”, “contributed volumes” and “briefs<sup>9</sup>”); as well as five discipline clusters: “humanities”, “social sciences”, “business and economics”, “medical, biomedical and life sciences” and “physical sciences, engineering, mathematics and computer science”. Springer Nature also provided access to metadata relating to an additional 21,059 non-OA titles for the purposes of the study. Of the 21,059 non-OA books, a comparison set of {{text_data.num_closed }} 3,653 non-OA books was selected for closer analysis. The non-OA books were selected using a stratified random sampling procedure (stratified across combinations of book type, discipline cluster and year of publication) aimed at maximising statistical power of the sample and maintaining a consistent ratio of OA to non-OA books in each stratum.
 
-There are three primary metrics that are of interest to this study; namely downloads, citations and web visibility. The first two of these are supplied by Springer Nature. The Springer Nature downloads data includes country information for logged access (known institutional subscriber to Springer Nature). This is supplemented with the use of the IP2Location database to determine country locations of anonymous downloads. Web visibility is determined through analysis performed by a webometrics tool. In particular, we analyse URLs mentioning each book to extract information such as the number of unique domain names that references the book and country of the domain name. 
+There are three primary metrics that are of interest to this study; namely downloads, citations and web visibility. The first two of these are supplied by Springer Nature. The Springer Nature downloads data includes country information for logged access (known institutional subscriber to Springer Nature). This is supplemented with the use of the IP2Location database<sup>10</sup> to determine country locations of anonymous downloads. Web visibility is determined through analysis performed by a webometrics<sup>11</sup> tool. In particular, we analyse URLs mentioning each book to extract information such as the number of unique domain names<sup>12</sup> that references the book and country of the domain name. 
 
 We compare the average number of downloads, citations and unique domains, as well as the average downloads over time, between OA and non-OA books across different book types and discipline clusters. The geographic distributions of downloads across countries are visualised and are compared using the Gini coefficient. Further details of the data and methodology are provided in the Appendix.
-
 
 The article focuses on four key questions: 
 * Do OA books and non-OA books show different patterns of geographic usage?
 * Is there evidence of wider usage particularly from countries and areas that are not high 
 users of non-OA books?
-* Does such performance vary, depending on the form (e.g. monograph, Brief, contributed volume) 
-of the book, its disciplinary area or its imprint?
+* Does such performance vary, depending on the form (e.g. monograph, brief, contributed volume) 
+of the book or its disciplinary area?
 * Is there robust evidence that OA books out-perform non-OA books on various proxy measures of usage?
 
 Analysis and discussion
@@ -79,7 +78,6 @@ OA books as a group have on average {{ text_data.oa_times_more_downloads }}10 ti
 
 The number of citations is a useful proxy of academic usage, while web visibility provides insight into how the books are being used on the web: either as linked text or references. These are additional proxies of usage to the number of downloads for books. The presence of higher levels of usage signalled by all three proxies suggest that OA books are not only being downloaded more often than their non-OA counterparts, but are also being read, used, referenced and attracting attention in different ways. This strengthens the case for a usage effect that is related to OA specifically.
 
-
 ![](figure2full.png)
 
 ![](figure_adv_full.png)
@@ -88,7 +86,8 @@ _Figure 1: Open access books show more usage and attention through average numbe
 citations and web domains._  The top panel compares average numbers of downloads, citations and 
 web visibility across all OA books and all non-OA books in our sample. Download numbers are 
 provided in 1000s and vertical lines are the 95% confidence interval for each metric. Parallel 
-comparison across book types and discipline clusters are given in the subsequent panels. There 
+comparison across book types and discipline clusters are given in the subsequent panels. Each 
+panel includes relevant books published in 2015, 2016 and 2017. There 
 are no OA books in the brief category for biomedical sciences.
 
 ### Open access books show more usage over time
@@ -100,7 +99,8 @@ We are also interested in comparing the download levels over the lifetimes of th
 _Figure 2: Open access books depicts more downloads per book for every month since date of 
 publication._ The number of downloads are displayed in log-scale, meaning the magnitude of 
 differences are even greater then shown. The 95% confidence bands for downloads are shown in 
-the top panel, which compares downloads over time for all books in the sample. Some books have 
+the top panel, which compares downloads over time for all books in the sample. Each panel 
+includes relevant books published in 2015, 2016 and 2017. Some books have 
 usage data from prior to the official release date so show usage prior to zero months.
 
 The top panel shows clear evidence of OA books having an advantage in the number of downloads over time. For all 40 months in the analysis, OA books have recorded significantly more downloads than their non-OA counterparts. That is, not only do OA books have a higher number of downloads to begin with, this effect is also persistent over time.
@@ -114,7 +114,7 @@ By analysing the geolocation of downloads, we are able to provide comparisons of
 
 Evidently the usage (via downloads) of both non-OA and OA books is international and spans the globe. Usage of non-OA books is identified in 118 countries. In contrast, usage of OA books is identified in 201 countries. For both OA and non-OA books the highest levels of usage are seen in the USA, UK, Germany and mainland China. With only a few exceptions, OA books see higher levels of usage across the globe. There is also evidence that OA books see more average downloads from some African and Latin American countries that otherwise had very little access to non-OA titles.
 
-An important aspect to consider is the role of population size in the geographical patterns of usage. One challenge with the analysis of academic usage is to identify a good proxy of “academic population size”. Examples of this include normalisation by the country’s number of people in tertiary education, overall academic output size and total number of citations. We provide one such example through normalising the downloads by total number of publications (see Appendix for details on this data). This is visualised in Figure S1 of the Appendix.. 
+An important aspect to consider is the role of population size in the geographical patterns of usage. One challenge with the analysis of academic usage is to identify a good proxy of “academic population size”. Examples of this include normalisation by the country’s number of people in tertiary education, overall academic output size and total number of citations. We provide one such example through normalising the downloads by total number of publications (see Appendix for details on this data). This is visualised in Figure S1 of the Appendix.
 
 While total publication size may not be a perfect proxy for all potential academic usages of the books, this normalisation suggests that “usage per academic work” for both OA and non-OA books is fairly consistent across North America and North Western Europe (as well as mainland China, South Africa and Australia). Focusing on other geographical regions, and consistent with the overall download counts (see Figure S1), Egypt emerges as a heavy user of non-OA content relative to overall academic outputs, along with Uruguay, Ethiopia and Uzbekistan. Relatively heavy users of OA content relative to academic output size include Somalia, Afghanistan, Bhutan, Niger and South Sudan.
 
@@ -161,7 +161,7 @@ For Africa and Latin America we see substantial enhanced usage overall from thos
 
 The size of the geographic effect is strongly enhanced by OA. OA books about Africa are widely read beyond Africa as well as in Africa. There is a very large enhancement of usage compared to the whole sample across the African continent. By contrast, non-OA books with “Africa” in the title show a usage enhancement only in South Africa, Uganda, Ethiopia and Sudan. Not only does OA enhance usage in countries under-represented in global scholarship, it also enhances the global usage of scholarship about under-represented countries. See Case study in the Appendix for an example of the enhancement of usage for a book with a specific country in the title.
 
-Similar effects are seen for Latin America, although the enhancement is not quite as localised as in the case of Africa. Usage in Latin America is strongly enhanced for all books with ‘Latin America” (including variations and possessives such as “Latin American”) in the title and the degree of enhancement is substantially stronger for OA books. In addition there is broader enhancement of usage internationally for the OA books. The overall enhancement effect is larger for books with “Latin America” (maximum enhancement of 100 usage) than it is for “Africa” (maximum enhancement of 5-fold).
+Similar effects are seen for Latin America, although the enhancement is not quite as localised as in the case of Africa. Usage in Latin America is strongly enhanced for all books with ‘Latin America” (including variations and possessives such as “Latin American”) in the title and the degree of enhancement is substantially stronger for OA books. In addition there is broader enhancement of usage internationally for the OA books. The overall enhancement effect is larger for books with “Latin America” (maximum enhancement of 100 times more usage) than it is for “Africa” (maximum enhancement of 5-fold).
 
 ![](africa_title_effect.png)
 
@@ -182,7 +182,7 @@ At the other end of the scale there is no obvious pattern in the countries that 
 
 In this study we use the number of unique domains determined by webometrics analysis as a proxy for web visibility. While OA books display higher levels of web visibility overall and for various categories of books (see Figure 1), these differences are proportionally much less than those depicted by downloads and citations.
 
-Broadly speaking the geographical representation of pages that refer to books in the corpus is consistent with the usage via downloads and citations, with European (.uk, .de, .it), North American (.edu, .ca) and Australian (.au) top level domains (TLDs) dominating (see Table S1 in the Appendix). The top ten TLDs constitute {{ text_data.top_10_tld_pc_all }}80% of all web pages identified for the whole corpus of books. Overall, the difference between the number of websites and the range of TLDs between the OA and non-OA books shows a {{ text_data.oa_pc_increase_sites }}37% increase in unique domains referencing the OA books versus non-OA titles (with the increases for each of the top ten TLDs displayed in Figure S4). This is a relatively small increase compared to the {{ text_data.oa_times_more_downloads }}10-fold effect on downloads and more than doubling of the number of citations.
+Broadly speaking the geographical representation of pages that refer to books in the corpus is consistent with the usage via downloads and citations, with European (.uk, .de, .it), North American (.edu, .ca) and Australian (.au) top level domains<sup>13</sup> (TLDs) dominating (see Table S1 in the Appendix). The top ten TLDs constitute {{ text_data.top_10_tld_pc_all }}80% of all web pages identified for the whole corpus of books. Overall, the difference between the number of websites and the range of TLDs between the OA and non-OA books shows a {{ text_data.oa_pc_increase_sites }}37% increase in unique domains referencing the OA books versus non-OA titles (with the increases for each of the top ten TLDs displayed in Figure S4). This is a relatively small increase compared to the {{ text_data.oa_times_more_downloads }}10-fold effect on downloads and more than doubling of the number of citations.
 
 Springer Nature has well established and effective pathways for marketing and digital dissemination which are applied to both OA and non-OA titles. The small effect of OA on the number of websites referring to these titles is most likely to be a result of the fact that both OA and non-OA titles benefit from these processes. 
 
@@ -237,10 +237,12 @@ analysed are provided.
 
 
 Acknowledgements
+----------------
 Springer Nature provided funding to COARD to conduct this research and also provided the data. 
 
 
 Competing interests
+-------------------
 This work was funded by Springer Nature through a research project by COARD (previously Knowledge Unlatched Research). Springer Nature also provided the usage and citation data and were involved in the design of the open access sample set (which includes all English language open access books published across 2015-2017 by Springer Nature). The comparison set of books that are not open access was selected from the full list of comparable books by the COARD team. Several of the co-authors are from Springer Nature and were actively involved in discussion of the analysis and preparation of the article narrative.
 
 
@@ -318,7 +320,7 @@ proxy for use of the books. It provides an indication of the extent to which dig
 referred to, discussed, and used via the world wide web. In order to measure web visibility we used the ISBNs 
 in the study data set to establish book titles and author surnames via the Google Books’ API. Using the author 
 and title as search terms we analysed the visibility of all the books on the web using the Webometric Analyst 
-2.0 tool developed by Thelwall et al. and collected the number of URLs mentioning the title and author surname. 
+2.0 tool<sup>14</sup> developed by Thelwall et al. and collected the number of URLs mentioning the title and author surname. 
 We then extracted unique domain names and top level domains (TLDs) to analyse countries of the URLs mentioning 
 each of these titles.
 
@@ -412,3 +414,19 @@ Other African countries also show enhanced proportional usage with Nigeria, Ghan
 
 {{ helper.md_tableize(case_study_countrytable) }}
 
+Notes
+=====
+1. Davies, P. M., Simon, D. H., & Connolly, M. J. L. (2008). Open access publishing, article downloads, and citations: randomised controlled trial. BMJ, 337, a568. https://doi.org/10.1136/bmj.a568
+2. Wang, X., Liu, C., Mao, W., & Fang, Z. (2015). The open access advantage considering citation, article usage and social media attention. Scientometrics, 103, 555-564. https://doi.org/10.1007/s11192-015-1547-0
+3. Holmberg, K., Hedman, J., Bowman, T. D., Didegah, F., & Laakso, M. (2020). Do articles in open access journals have more frequent altmetric activity than articles in subscription-based journals? An investigation of the research output of Finnish universities. Scientometrics, 122, 645-659. https://doi.org/10.1007/s11192-019-03301-x
+4. Tennant, J. P., Waldner, F., Jacques, D. C., Masuzzo, P., Collister, L. B., & Hartgerink, C. H. J. (2016). The academic, economic and societal impacts of Open Access: an evidence-based review. F1000 Research, 5, 632. https://dx.doi.org/10.12688%2Ff1000research.8460.3
+5. Ozaygen, A. (2019). Analysing the usage data of open access scholarly books: What can data tell us? PhD thesis, Curtin University. http://hdl.handle.net/20.500.11937/79585
+6. COUNTER is an international non-profit membership organization of libraries, publishers and vendors. COUNTER publishes a widely accepted standard for calculating the usage of electronic resources, as well as a Code of Practice for handling and cleaning usage data for scholarly publications. See https://www.projectcounter.org/
+7. Snijder, R. (2013). Do developing countries profit from free books?: Discovery and online usage in developed and developing countries compared. Journal of Electronic Publishing, 16(1). https://doi.org/10.3998/3336451.0016.103
+8. https://www.springernature.com/gp/open-research/journals-books/books/the-oa-effect 
+9. Springer Briefs and Palgrave Pivots are Springer Nature’s short-form book types, typically 50-125pp / 25,000-50,000 words. For brevity, both formats are referred to as ‘briefs’ throughout the report.
+10. The IP2Location lite DB9 was used for this study. https://lite.ip2location.com/database/ip-country-region-city-latitude-longitude-zipcode
+11. Webometrics aims to measure the impact of a research object across the web by examining numbers and types of hyperlinks and employing bibliometrics approaches to examine usage patterns. Almind, T. C., & Ingwersen, P. (1997). Informetric analyses on the World Wide Web: Methodological approaches to webometrics. Journal of Documentation, 53(4), 404–426. https://doi.org/10.1108/EUM0000000007205
+12. A domain name is an address that people use on the internet, whether for websites or for email. It is a string of characters which usually spells out a word or the name of a company, organization or person. For the URL http://ccat.curtin.edu.au/about-us.html the domain name is curtin.edu.au.
+13. TLD refers to the last segment of a domain name, or the part that follows immediately after the period. TLDs are classified into two categories: generic TLDs (gTLD) and country-code TLDs (ccTLD). Examples of some common TLDs include .com (commercial businesses), .org (organizations), .net (network organizations), .gov (U.S. government agencies), .edu (educational facilities like universities), .ca (Canada), and .au (Australia).
+14. Webometric Analyst is a free software program that uses URL citations or title mentions to produce network diagrams, link impact reports, and web environment networks. It mainly uses Bing’s API. See http://lexiurl.wlv.ac.uk/. Thelwall, M. (2017). Web indicators for research evaluation: A practical guide. San Rafael, CA: Morgan & Claypool. https://doi.org/10.2200/S00733ED1V01Y201609ICR052
