@@ -10,6 +10,7 @@ import seaborn as sns
 import matplotlib.gridspec as gs
 import matplotlib.colors as colors
 import json
+from num2words import num2words
 from PIL import Image
 
 project_id = 'coki-scratch-space'
@@ -227,11 +228,12 @@ def process_mapdata(usage):
 
 def plot_figures(af):
     """Main plotting and processing function"""
+
     store_filepath = af.path_to_cached_file(
         HDF5_CANONICAL_FILENAME, "get_data")
 
     print('Loading data from:', store_filepath)
-
+    ##
     with pd.HDFStore(store_filepath) as store:
         usage = store['usage']
         cites = store['cites']
@@ -269,17 +271,41 @@ def plot_figures(af):
 # In text data #
 ################
 
+def times(ratio):
+    """Return 'more than double/triple' as appropriate given a ratio"""
+
+    if ratio > 4:
+        wordnum = num2words(int(ratio))
+        return f"over {wordnum} times more"
+        return "triple"
+    elif ratio > 3.:
+        return "more than triple"
+    elif ratio == 3:
+        return "triple"
+    elif ratio > 2.:
+        return "more than double"
+    elif ratio == 2:
+        return "double"
+    elif ratio > 1:
+        return f"{int(ratio - 1 * 100)}% more"
+
 def in_text_data(af, usage, cites, mapdata, tld):
     d = {}
 
-    d['num_oa'] = usage[usage.is_oa==True].isbn.nunique()
-    d['num_closed'] = usage[usage.is_oa==False].isbn.nunique()
-    ratio = d['num_closed'] / d['num_oa']
+    num_oa = usage[usage.is_oa==True].isbn.nunique()
+    num_closed = usage[usage.is_oa == False].isbn.nunique()
+    ratio = num_oa / num_closed
+
+    d['num_oa'] = "{:,}".format(num_oa)
+    d['num_closed'] = "{:,}".format(num_closed)
+    d['ratio'] = ratio
 
     oa_downloads = usage[usage.is_oa==True].downloads.sum()
     closed_downloads = usage[usage.is_oa==False].downloads.sum()
 
-    d['oa_times_more_downloads'] = int(np.round((oa_downloads / closed_downloads * ratio), decimals=0))
+    d['oa_downloads'] = "{:,}".format(oa_downloads)
+    d['closed_downloads'] = "{:,}".format(closed_downloads)
+    d['oa_times_more_downloads'] = num2words(np.round((oa_downloads / closed_downloads * ratio), decimals=0))
 
     downloads = usage.groupby(['is_oa', 'isbn'])
     downloads = downloads.agg(
@@ -288,26 +314,25 @@ def in_text_data(af, usage, cites, mapdata, tld):
     downloads.reset_index(inplace=True)
     tempdata = pd.merge(downloads, cites, on='isbn')
 
-    d['oa_cites'] = int(tempdata[tempdata.is_oa==True].Citations.sum())
-    d['closed_cites'] = int(tempdata[tempdata.is_oa==False].Citations.sum())
+    oa_cites = int(tempdata[tempdata.is_oa==True].Citations.sum())
+    closed_cites = int(tempdata[tempdata.is_oa==False].Citations.sum())
 
-    d['oa_times_more_citations'] = np.round(d['oa_cites'] / d['closed_cites'] * ratio,
-                                            decimals=1)
+    d['oa_times_more_citations'] = times(oa_cites / closed_cites * ratio)
 
-    # bycountry = usage.groupby(['iso_a3', 'is_oa']).agg(
-    #     downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
-    # )
-    # bycountry.reset_index(inplace=True)
-    # only_oa = bycountry[(bycountry.loc[is_oa==False, 'downloads'] == 0) &
-    #                     (bycountry.loc[(,True), 'downloads'] > 0)]
-    # d['countries_with_oa_but_not_nonoa_usage'] = len(only_oa)
+    bycountry = usage.groupby(['iso_a3','is_oa']).agg(
+         downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+    )
+    bycountry.reset_index(inplace=True)
+    only_oa = bycountry[(bycountry.loc[bycountry.is_oa==False, 'downloads'] == 0) &
+                        (bycountry.loc[bycountry.is_oa==True, 'downloads'] > 0)]
+    d['countries_with_oa_but_not_nonoa_usage'] = int(len(only_oa))
     # d['new_countries_in_africa'] = len(only_oa[only_oa.continent == "AFRICA"])
-    # d['new_countries_total_downloads'] = only_oa.downloads.sum()
-    # d['new_countries_downloads_pc'] = int(np.round(d['new_countries_total_downloads'] /
-    #                                       usage[
-    #                                           usage.logged==True
-    #                                       ].downloads.sum() * 100,
-    #                                       decimals=0))
+    d['new_countries_total_downloads'] = int(only_oa.downloads.sum())
+    d['new_countries_downloads_pc'] = int(np.round(d['new_countries_total_downloads'] /
+                                          usage[
+                                              usage.logged==True
+                                          ].downloads.sum() * 100,
+                                          decimals=0))
 
     top_ten_tlds = tld[tld.rankTotal < 11]
     top_ten_tld_sites = top_ten_tlds.Total.sum()
