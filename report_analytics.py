@@ -86,16 +86,6 @@ def get_data(af,
         store['tld'] = tld
     af.add_existing_file(HDF5_CANONICAL_FILENAME, remove=True)
 
-    # with pd.HDFStore('data_cache.h5') as store:
-    #     store['usage'] = usage
-    #     store['cites'] = cites
-    #     store['webo'] = webo
-    #     store['continents'] = continents
-    #     store['normal'] = normal
-    #     store['chapters'] = chapters
-    #     store['tld'] = tld
-
-
 def get_usage_data():
     sql = '''
     SELECT *
@@ -155,10 +145,8 @@ ORDER BY year, cluster, title
 
 def get_normalisation_data():
     sql = '''
-SELECT 
-  Country, 
-  Publication
-FROM `coki-scratch-space.SpringerNature.normalization`
+SELECT *
+FROM `coki-scratch-space.SpringerNature.publications`
 '''
     df = pd.read_gbq(sql, project_id=project_id)
     return df
@@ -233,7 +221,7 @@ def plot_figures(af):
         HDF5_CANONICAL_FILENAME, "get_data")
 
     print('Loading data from:', store_filepath)
-    ##
+
     with pd.HDFStore(store_filepath) as store:
         usage = store['usage']
         cites = store['cites']
@@ -246,7 +234,7 @@ def plot_figures(af):
     usage = process_usage_data(usage)
     mapdata, world = process_mapdata(usage)
 
-    in_text_data(af, usage, cites, mapdata, tld)
+    in_text_data(af, usage, cites, world, tld)
     figure1(af, usage)
     figure2(af, usage, cites, webo)
     figure_gini(af, usage)
@@ -254,7 +242,6 @@ def plot_figures(af):
     scatter_chapters(af, usage, chapters)
     tld_bar(af, tld, usage)
     tld_table(af, tld)
-
 
     map_oa_noa(af, mapdata)
     av_downloads(af, usage, world)
@@ -277,7 +264,6 @@ def times(ratio):
     if ratio > 4:
         wordnum = num2words(int(ratio))
         return f"over {wordnum} times more"
-        return "triple"
     elif ratio > 3.:
         return "more than triple"
     elif ratio == 3:
@@ -289,12 +275,12 @@ def times(ratio):
     elif ratio > 1:
         return f"{int(ratio - 1 * 100)}% more"
 
-def in_text_data(af, usage, cites, mapdata, tld):
+def in_text_data(af, usage, cites, world, tld):
     d = {}
 
     num_oa = usage[usage.is_oa==True].isbn.nunique()
     num_closed = usage[usage.is_oa == False].isbn.nunique()
-    ratio = num_oa / num_closed
+    ratio = num_closed / num_oa
 
     d['num_oa'] = "{:,}".format(num_oa)
     d['num_closed'] = "{:,}".format(num_closed)
@@ -305,7 +291,7 @@ def in_text_data(af, usage, cites, mapdata, tld):
 
     d['oa_downloads'] = "{:,}".format(oa_downloads)
     d['closed_downloads'] = "{:,}".format(closed_downloads)
-    d['oa_times_more_downloads'] = num2words(np.round((oa_downloads / closed_downloads * ratio), decimals=0))
+    d['oa_times_more_downloads'] = num2words(np.round((oa_downloads / closed_downloads * ratio)))
 
     downloads = usage.groupby(['is_oa', 'isbn'])
     downloads = downloads.agg(
@@ -319,18 +305,27 @@ def in_text_data(af, usage, cites, mapdata, tld):
 
     d['oa_times_more_citations'] = times(oa_cites / closed_cites * ratio)
 
-    bycountry = usage.groupby(['iso_a3','is_oa']).agg(
-         downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+    bycountry = usage.groupby(['iso_a3','logged']).agg(
+        downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
     )
     bycountry.reset_index(inplace=True)
-    only_oa = bycountry[(bycountry.loc[bycountry.is_oa==False, 'downloads'] == 0) &
-                        (bycountry.loc[bycountry.is_oa==True, 'downloads'] > 0)]
-    d['countries_with_oa_but_not_nonoa_usage'] = int(len(only_oa))
-    # d['new_countries_in_africa'] = len(only_oa[only_oa.continent == "AFRICA"])
-    d['new_countries_total_downloads'] = int(only_oa.downloads.sum())
+    bycountry = pd.merge(bycountry, world, on='iso_a3')
+
+
+    all_cids = bycountry.iso_a3.unique()
+    anon_cids = bycountry[(bycountry.logged==False) &
+                            (bycountry.downloads > 0)]['iso_a3'].unique()
+    logged_cids = bycountry[(bycountry.logged==True) &
+                                (bycountry.downloads > 0)]['iso_a3'].unique()
+    anon_only = set(anon_cids) & (set(all_cids) - set(logged_cids))
+
+    d['countries_with_anon_but_not_logged_usage'] = int(len(anon_only))
+    d['new_countries_in_africa'] = len(bycountry[(bycountry.iso_a3.isin(anon_only)) &
+                                                 (bycountry.continent == "Africa")])
+    d['new_countries_total_downloads'] = int(bycountry[bycountry.iso_a3.isin(anon_only)].downloads.sum())
     d['new_countries_downloads_pc'] = int(np.round(d['new_countries_total_downloads'] /
                                           usage[
-                                              usage.logged==True
+                                              usage.logged==False
                                           ].downloads.sum() * 100,
                                           decimals=0))
 
@@ -686,19 +681,12 @@ def av_downloads(af, usage, world):
     figdata['Average downloads per non-OA book'] = figdata.downloads_noa.fillna(0)
 
     panel = map_compare(figdata, ['Average downloads per OA book', 'Average downloads per non-OA book'],
-                'fig3-download_perbook',
-                # title = 'Average Downloads per Book',
                 figsize=(12, 12),
                 vmin=1, vmax=mapdata['downloads'].max(),
-                panel_titles=True, cmap=lilacs,
+                panel_titles=True,
                 legend_kwds={'label': 'Downloads',
                              'orientation': "horizontal"})
-    # panel = map_compare(mapdata, ['Average downloads per OA book', 'Average downloads per non-OA book'],
-    #                     figsize=(12, 12),
-    #                     vmin=1, vmax=mapdata['downloads'].max(),
-    #                     panel_titles=True,
-    #                     legend_kwds={'label': 'Downloads',
-    #                                  'orientation': "horizontal"})
+
     panel.savefig('av_downloads.png')
     af.add_existing_file('av_downloads.png', remove=True)
     plt.close()
@@ -843,13 +831,13 @@ def usage_normal_by_pubs(af, usage, world, normal):
     # af.add_existing_file('norm_downloads.png', remove=True)
     # plt.close()
 
-    pubs = normal.set_index('Country')
+    pubs = normal.set_index('iso_a3')
     oa_download = usage[usage.is_oa == True].groupby(['country']).sum()['downloads'].to_frame().reset_index().set_index(
         'country')
     noa_download = usage[usage.is_oa == False].groupby(['country']).sum()['downloads'].to_frame().reset_index().set_index(
         'country')
-    oa_effect = oa_download['downloads'].div(pubs['Publication']).div(usage[usage['is_oa'] == True]['isbn'].nunique())
-    noa_effect = noa_download['downloads'].div(pubs['Publication']).div(
+    oa_effect = oa_download['downloads'].div(pubs['Publications']).div(usage[usage['is_oa'] == True]['isbn'].nunique())
+    noa_effect = noa_download['downloads'].div(pubs['Publications']).div(
         usage[usage['is_oa'] == False]['isbn'].nunique())
     oa_effect = oa_effect.to_frame()
     noa_effect = noa_effect.to_frame()
