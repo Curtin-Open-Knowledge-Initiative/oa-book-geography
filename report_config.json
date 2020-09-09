@@ -10,7 +10,7 @@
         {"depends": ["get_data"] }
     ]
   ],
-  "templates": ["paper.md", "numbers.md"],
+  "templates": ["paper.md"],
   "filters": [
     [
       "pandoc",

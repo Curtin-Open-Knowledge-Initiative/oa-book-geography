@@ -9,6 +9,7 @@ import pydata_google_auth
 import seaborn as sns
 import matplotlib.gridspec as gs
 import matplotlib.colors as colors
+from matplotlib.lines import Line2D
 import json
 from num2words import num2words
 from PIL import Image
@@ -217,11 +218,12 @@ def process_mapdata(usage):
 def plot_figures(af):
     """Main plotting and processing function"""
 
+    # Load and collect the cached data
     store_filepath = af.path_to_cached_file(
         HDF5_CANONICAL_FILENAME, "get_data")
-
     print('Loading data from:', store_filepath)
 
+    # Load data to data frames
     with pd.HDFStore(store_filepath) as store:
         usage = store['usage']
         cites = store['cites']
@@ -231,18 +233,20 @@ def plot_figures(af):
         chapters = store['chapters']
         tld = store['tld']
 
+    # Data processing
     usage = process_usage_data(usage)
     mapdata, world = process_mapdata(usage)
 
+    # Generate figures and in-text data
     in_text_data(af, usage, cites, world, tld)
-    figure1(af, usage)
-    figure2(af, usage, cites, webo)
+    figure_comparisons(af, usage, cites, webo)
+    figure_downloads_by_time(af, usage)
     figure_gini(af, usage)
-    figure_oa_advantage(af, usage, cites, webo)
     scatter_chapters(af, usage, chapters)
     tld_bar(af, tld, usage)
     tld_table(af, tld)
 
+    # Generate the maps
     map_oa_noa(af, mapdata)
     av_downloads(af, usage, world)
     anonymous_where_no_logged(af, usage, world)
@@ -251,7 +255,11 @@ def plot_figures(af):
     latam_title_effect(af, usage, continents, world)
     usage_normal_by_pubs(af, usage, world, normal)
 
+    # Run the case study code on Digital Kenya
     case_study('978-1-137-57878-5', usage, world, af)
+
+    # Add the additional map figure generated in R
+    af.add_existing_file("assets/city-Digital_Kenya_v2.png")
 
 
 ################
@@ -322,8 +330,10 @@ def in_text_data(af, usage, cites, world, tld):
     d['countries_with_anon_but_not_logged_usage'] = int(len(anon_only))
     d['new_countries_in_africa'] = len(bycountry[(bycountry.iso_a3.isin(anon_only)) &
                                                  (bycountry.continent == "Africa")])
-    d['new_countries_total_downloads'] = int(bycountry[bycountry.iso_a3.isin(anon_only)].downloads.sum())
-    d['new_countries_downloads_pc'] = int(np.round(d['new_countries_total_downloads'] /
+
+    new_countries_total_downloads = bycountry[bycountry.iso_a3.isin(anon_only)].downloads.sum()
+    d['new_countries_total_downloads'] = "{:,}".format(new_countries_total_downloads)
+    d['new_countries_downloads_pc'] = int(np.round(new_countries_total_downloads /
                                           usage[
                                               usage.logged==False
                                           ].downloads.sum() * 100,
@@ -334,7 +344,8 @@ def in_text_data(af, usage, cites, world, tld):
     total_sites = tld.Total.sum()
     d['top_10_tld_pc_all'] = int(np.round((top_ten_tld_sites / total_sites * 100), decimals=0))
 
-    d['oa_pc_increase_sites'] = int(np.round((tld.OATotal.sum() / tld.nonOATotal.sum() * 100 * ratio), decimals=0))
+    d['oa_pc_increase_sites'] = int(np.round((tld.OATotal.sum() / tld.nonOATotal.sum() *
+                                               100 * ratio - 100), decimals=0))
 
     d['num_countries_oa_books'] = int(usage[usage.is_oa==True].iso_a3.nunique())
     d['num_countries_noa_books'] = int(usage[usage.is_oa == False].iso_a3.nunique())
@@ -347,41 +358,7 @@ def in_text_data(af, usage, cites, world, tld):
 # Individual Figures #
 ######################
 
-def figure1(af, usage):
-    # Group and calculate summary statistics
-    groups = usage.groupby(['short_cluster', 'category', 'Months After Publication', 'Open Access'])
-    grouped = groups.agg(
-        downloads=pd.NamedAgg(column='downloads', aggfunc='sum'),
-        num_books=pd.NamedAgg(column='isbn', aggfunc='nunique')
-    )
-    grouped['Downloads per Book'] = grouped.downloads / grouped.num_books
-    grouped.reset_index(inplace=True)
-
-    # Summary Panel
-    panela = top_panel(sns.lineplot,
-                       grouped,
-                       'Months After Publication', 'Downloads per Book',
-                       xlim=(-2, 40), ylim=(10, 20000),
-                       linewidth=3)
-    panela.set(yscale='log')
-    panela.savefig('figure1a.png', bbox_inches='tight', dpi=300)
-    af.add_existing_file('figure1a.png', remove=True)
-    plt.close()
-
-    # Main Panel
-    panelb = grid_panel(sns.lineplot,
-                        grouped,
-                        'Months After Publication', 'Downloads per Book',
-                        xlim=(-2, 40), ylim=(10, 20000),
-                        linewidth=3)
-    panelb.set(yscale='log')
-    panelb.savefig('figure1b.png', bbox_inches='tight', dpi=300)
-    af.add_existing_file('figure1b.png', remove=True)
-    plt.close()
-    combine_panels(af, 'figure1a.png', 'figure1b.png', 'figure1full.png')
-
-
-def figure2(af, usage, cites, webo):
+def figure_comparisons(af, usage, cites, webo):
     # Data Processing
     downloads = usage.groupby(['Open Access', 'isbn'])
     downloads = downloads.agg(
@@ -405,95 +382,51 @@ def figure2(af, usage, cites, webo):
                        figmelt,
                        'variable', 'Metric')
     panela.set_axis_labels(x_var='', y_var='Number (Downloads in 1000s)')
-    panela.savefig('figure2a.png', bbox_inches='tight', dpi=300)
-    af.add_existing_file('figure2a.png', remove=True)
+    panela.savefig('figure1a.png', bbox_inches='tight', dpi=300)
+    af.add_existing_file('figure1a.png', remove=True)
     plt.close()
 
     panelb = grid_panel(sns.barplot,
                         figmelt,
                         'variable', 'Metric', ci=None)
     panelb.set_axis_labels(x_var='', y_var='')
+    panelb.savefig('figure1b.png', bbox_inches='tight', dpi=300)
+    af.add_existing_file('figure1b.png', remove=True)
+    plt.close()
+    combine_panels(af, 'figure1a.png', 'figure1b.png', 'figure1full.png')
+
+def figure_downloads_by_time(af, usage):
+    # Group and calculate summary statistics
+    groups = usage.groupby(['short_cluster', 'category', 'Months After Publication', 'Open Access'])
+    grouped = groups.agg(
+        downloads=pd.NamedAgg(column='downloads', aggfunc='sum'),
+        num_books=pd.NamedAgg(column='isbn', aggfunc='nunique')
+    )
+    grouped['Downloads per Book'] = grouped.downloads / grouped.num_books
+    grouped.reset_index(inplace=True)
+
+    # Summary Panel
+    panela = top_panel(sns.lineplot,
+                       grouped,
+                       'Months After Publication', 'Downloads per Book',
+                       xlim=(-2, 40), ylim=(10, 20000),
+                       linewidth=3)
+    panela.set(yscale='log')
+    panela.savefig('figure2a.png', bbox_inches='tight', dpi=300)
+    af.add_existing_file('figure2a.png', remove=True)
+    plt.close()
+
+    # Main Panel
+    panelb = grid_panel(sns.lineplot,
+                        grouped,
+                        'Months After Publication', 'Downloads per Book',
+                        xlim=(-2, 40), ylim=(10, 20000),
+                        linewidth=3)
+    panelb.set(yscale='log')
     panelb.savefig('figure2b.png', bbox_inches='tight', dpi=300)
     af.add_existing_file('figure2b.png', remove=True)
     plt.close()
     combine_panels(af, 'figure2a.png', 'figure2b.png', 'figure2full.png')
-
-
-def figure_oa_advantage(af, usage, cites, webo):
-    # Data Processing
-    downloads = usage.groupby(['Open Access', 'isbn'])
-    downloads = downloads.agg(
-        downloads=pd.NamedAgg(column='downloads', aggfunc='sum'),
-        short_cluster=pd.NamedAgg(column='short_cluster', aggfunc='max'),
-        category=pd.NamedAgg(column='category', aggfunc='max'))
-    downloads.reset_index(inplace=True)
-
-    # To make the y-scales comparable between metrics
-    downloads['Downloads'] = downloads.downloads / 1000
-
-    # Merging and reshaping the datasets
-    figdata = pd.merge(downloads, cites, on='isbn')
-    figdata = pd.merge(figdata, webo, on='isbn')
-
-    # Calculating the advantage
-    adv_grouping = figdata.groupby(['short_cluster', 'category', 'Open Access'])
-    adv_grouping = adv_grouping.agg(
-        Downloads=pd.NamedAgg(column='downloads', aggfunc='sum'),
-        Citations=pd.NamedAgg(column='Citations', aggfunc='sum'),
-        Domains=pd.NamedAgg(column='Domains', aggfunc='sum'),
-        numbooks=pd.NamedAgg(column='isbn', aggfunc='nunique'))
-    adv_grouping.reset_index(inplace=True)
-
-    advantage_list = []
-    for cluster in adv_grouping.short_cluster.unique():
-        for category in adv_grouping.category.unique():
-            num_oa = adv_grouping[(adv_grouping.short_cluster == cluster) &
-                                  (adv_grouping.category == category) &
-                                  (adv_grouping['Open Access'] == True)]['numbooks']
-            num_noa = adv_grouping[(adv_grouping.short_cluster == cluster) &
-                                   (adv_grouping.category == category) &
-                                   (adv_grouping['Open Access'] == False)]['numbooks']
-            if len(num_oa) != 1:
-                continue
-            num_oa = num_oa.iloc[0]
-            num_noa = num_noa.iloc[0]
-
-            for metric in ['Downloads', 'Citations', 'Domains']:
-                oa = adv_grouping[(adv_grouping.short_cluster == cluster) &
-                                  (adv_grouping.category == category) &
-                                  (adv_grouping['Open Access'] == True)][metric]
-                noa = adv_grouping[(adv_grouping.short_cluster == cluster) &
-                                   (adv_grouping.category == category) &
-                                   (adv_grouping['Open Access'] == False)][metric]
-
-                oa = float(oa.iloc[0]) / num_oa
-                noa = float(noa.iloc[0]) / num_noa
-                oa_adv = oa / noa
-                advantage_list.append({'short_cluster': cluster,
-                                       'category': category,
-                                       'variable': metric,
-                                       'Metric': oa_adv})
-    advantage = pd.DataFrame(advantage_list)
-
-    # Plot the panels
-    panela = top_panel(sns.barplot,
-                       advantage,
-                       'variable', 'Metric',
-                       hue=None, color='green')
-    panela.set_axis_labels(x_var='', y_var='Open Access Advantage (times)')
-    panela.savefig('figure_adv_a.png', bbox_inches='tight', dpi=300)
-    af.add_existing_file('figure_adv_a.png', remove=True)
-    plt.close()
-
-    panelb = grid_panel(sns.barplot,
-                        advantage,
-                        'variable', 'Metric',
-                        hue=None, color='green')
-    panelb.set_axis_labels(x_var='', y_var='Open Access Advantage (times)')
-    panelb.savefig('figure_adv_b.png', bbox_inches='tight', dpi=300)
-    af.add_existing_file('figure_adv_b.png', remove=True)
-    plt.close()
-    combine_panels(af, 'figure_adv_a.png', 'figure_adv_b.png', 'figure_adv_full.png')
 
 
 def figure_gini(af, usage):
@@ -814,28 +747,13 @@ def latam_title_effect(af, usage, continents, world):
     plt.close()
 
 def usage_normal_by_pubs(af, usage, world, normal):
-    # figdata = mapdata.merge(normal, on='name')
-    # # figdata.dropna(subset = 'publications')
-    # figdata['OA Downloads Normalized by Publication'] = figdata['Average downloads per OA book'] / \
-    #                                                     figdata.publications
-    # figdata['Non-OA Downloads Normalized by Publication'] = figdata['Average downloads per non-OA book'] / \
-    #                                                         figdata.publications
-    #
-    # panel = map_compare(figdata, ['OA Downloads Normalized by Publication',
-    #                               'Non-OA Downloads Normalized by Publication'],
-    #                     figsize=(12, 12),
-    #                     panel_titles=True,
-    #                     legend_kwds={'label': 'Downloads',
-    #                                  'orientation': "horizontal"})
-    # panel.savefig('norm_downloads.png')
-    # af.add_existing_file('norm_downloads.png', remove=True)
-    # plt.close()
-
     pubs = normal.set_index('iso_a3')
-    oa_download = usage[usage.is_oa == True].groupby(['country']).sum()['downloads'].to_frame().reset_index().set_index(
-        'country')
-    noa_download = usage[usage.is_oa == False].groupby(['country']).sum()['downloads'].to_frame().reset_index().set_index(
-        'country')
+    oa_download = usage[usage.is_oa == True].groupby(['iso_a3']).agg(
+        downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+    )
+    noa_download = usage[usage.is_oa == False].groupby(['iso_a3']).agg(
+        downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+    )
     oa_effect = oa_download['downloads'].div(pubs['Publications']).div(usage[usage['is_oa'] == True]['isbn'].nunique())
     noa_effect = noa_download['downloads'].div(pubs['Publications']).div(
         usage[usage['is_oa'] == False]['isbn'].nunique())
@@ -855,11 +773,11 @@ def usage_normal_by_pubs(af, usage, world, normal):
     panel = map_compare(figdata, ['OA book downloads normalized by publication',
                                   'Non-OA book downloads normalized by publication'],
                         figsize=(12, 12),
-                        panel_titles=True, cmap=lilacs,
+                        panel_titles=True,
                         legend_kwds={'label': 'Downloads',
                                      'orientation': "horizontal"})
-    panel.savefig('norm_downloads_lilac.png')
-    af.add_existing_file('norm_downloads_lilac.png', remove=True)
+    panel.savefig('norm_downloads.png')
+    af.add_existing_file('norm_downloads.png', remove=True)
     plt.close()
 
 ##############
@@ -1040,11 +958,14 @@ def top_panel(chart_type,
     if hue:
         figpanel.map(chart_type, x, y,
                      hue, hue_order=hue_order, palette=['darkorange', 'blue'], **kwargs)
+        figpanel.add_legend(labels=['Open Access', 'Not Open Access'])
     elif 'color' in kwargs.keys():
         figpanel.map(chart_type, x, y, **kwargs)
     else:
         figpanel.map(chart_type, x, y, palette=['darkorange', 'blue'], **kwargs)
-    figpanel.add_legend(labels=['Open Access', 'Not Open Access'])
+
+    figpanel.add_legend({'Open Access': Line2D([0], [0], color='darkorange', lw=8),
+                         'Not Open Access': Line2D([0], [0], color='blue', lw=8)})
     return figpanel
 
 
@@ -1081,7 +1002,7 @@ def combine_panels(af,
                    panela,
                    panelb,
                    new_image_name: str,
-                   y_pad: int = 0):
+                   y_pad: int = 10):
     a_filepath = af.path_to_cached_file(
         panela)
     b_filepath = af.path_to_cached_file(
