@@ -17,6 +17,15 @@ from PIL import Image
 project_id = 'coki-scratch-space'
 HDF5_CANONICAL_FILENAME = 'data_cache.h5'
 sns.set_context('paper', font_scale=1.4)
+coard = sns.color_palette([
+    '#00DDA8',
+    '#000033',
+    '#C6C6D6',
+    '#706F82',
+    '#FFB81C',
+])
+sns.set_palette(coard)
+
 
 def get_continuous_cmap(hex_list, float_list=None):
     rgb_list = [rgb_to_dec(hex_to_rgb(i)) for i in hex_list]
@@ -50,7 +59,9 @@ def rgb_to_dec(value):
     Returns: list (length 3) of decimal values'''
     return [v / 256 for v in value]
 
+
 lilacs = get_continuous_cmap(['#ffffff', '#937cb9'])
+coardmap = get_continuous_cmap(['#ffffff', '#000033'])
 
 
 ################
@@ -86,6 +97,7 @@ def get_data(af,
         store['chapters'] = chapters
         store['tld'] = tld
     af.add_existing_file(HDF5_CANONICAL_FILENAME, remove=True)
+
 
 def get_usage_data():
     sql = '''
@@ -218,6 +230,8 @@ def process_mapdata(usage):
 def plot_figures(af):
     """Main plotting and processing function"""
 
+    sns.set_palette(coard)
+
     # Load and collect the cached data
     store_filepath = af.path_to_cached_file(
         HDF5_CANONICAL_FILENAME, "get_data")
@@ -237,11 +251,13 @@ def plot_figures(af):
     usage = process_usage_data(usage)
     mapdata, world = process_mapdata(usage)
 
+    tld_bar(af, tld, usage)
     # Generate figures and in-text data
     in_text_data(af, usage, cites, world, tld)
     figure_comparisons(af, usage, cites, webo)
     figure_downloads_by_time(af, usage)
     figure_gini(af, usage)
+    # Testing Jointplot
     scatter_chapters(af, usage, chapters)
     tld_bar(af, tld, usage)
     tld_table(af, tld)
@@ -283,10 +299,11 @@ def times(ratio):
     elif ratio > 1:
         return f"{int(ratio - 1 * 100)}% more"
 
+
 def in_text_data(af, usage, cites, world, tld):
     d = {}
 
-    num_oa = usage[usage.is_oa==True].isbn.nunique()
+    num_oa = usage[usage.is_oa == True].isbn.nunique()
     num_closed = usage[usage.is_oa == False].isbn.nunique()
     ratio = num_closed / num_oa
 
@@ -294,8 +311,8 @@ def in_text_data(af, usage, cites, world, tld):
     d['num_closed'] = "{:,}".format(num_closed)
     d['ratio'] = ratio
 
-    oa_downloads = usage[usage.is_oa==True].downloads.sum()
-    closed_downloads = usage[usage.is_oa==False].downloads.sum()
+    oa_downloads = usage[usage.is_oa == True].downloads.sum()
+    closed_downloads = usage[usage.is_oa == False].downloads.sum()
 
     d['oa_downloads'] = "{:,}".format(oa_downloads)
     d['closed_downloads'] = "{:,}".format(closed_downloads)
@@ -308,23 +325,22 @@ def in_text_data(af, usage, cites, world, tld):
     downloads.reset_index(inplace=True)
     tempdata = pd.merge(downloads, cites, on='isbn')
 
-    oa_cites = int(tempdata[tempdata.is_oa==True].Citations.sum())
-    closed_cites = int(tempdata[tempdata.is_oa==False].Citations.sum())
+    oa_cites = int(tempdata[tempdata.is_oa == True].Citations.sum())
+    closed_cites = int(tempdata[tempdata.is_oa == False].Citations.sum())
 
     d['oa_times_more_citations'] = times(oa_cites / closed_cites * ratio)
 
-    bycountry = usage.groupby(['iso_a3','logged']).agg(
-        downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+    bycountry = usage.groupby(['iso_a3', 'logged']).agg(
+        downloads=pd.NamedAgg(column='downloads', aggfunc='sum')
     )
     bycountry.reset_index(inplace=True)
     bycountry = pd.merge(bycountry, world, on='iso_a3')
 
-
     all_cids = bycountry.iso_a3.unique()
-    anon_cids = bycountry[(bycountry.logged==False) &
+    anon_cids = bycountry[(bycountry.logged == False) &
+                          (bycountry.downloads > 0)]['iso_a3'].unique()
+    logged_cids = bycountry[(bycountry.logged == True) &
                             (bycountry.downloads > 0)]['iso_a3'].unique()
-    logged_cids = bycountry[(bycountry.logged==True) &
-                                (bycountry.downloads > 0)]['iso_a3'].unique()
     anon_only = set(anon_cids) & (set(all_cids) - set(logged_cids))
 
     d['countries_with_anon_but_not_logged_usage'] = int(len(anon_only))
@@ -334,10 +350,10 @@ def in_text_data(af, usage, cites, world, tld):
     new_countries_total_downloads = bycountry[bycountry.iso_a3.isin(anon_only)].downloads.sum()
     d['new_countries_total_downloads'] = "{:,}".format(new_countries_total_downloads)
     d['new_countries_downloads_pc'] = int(np.round(new_countries_total_downloads /
-                                          usage[
-                                              usage.logged==False
-                                          ].downloads.sum() * 100,
-                                          decimals=0))
+                                                   usage[
+                                                       usage.logged == False
+                                                       ].downloads.sum() * 100,
+                                                   decimals=0))
 
     top_ten_tlds = tld[tld.rankTotal < 11]
     top_ten_tld_sites = top_ten_tlds.Total.sum()
@@ -345,9 +361,9 @@ def in_text_data(af, usage, cites, world, tld):
     d['top_10_tld_pc_all'] = int(np.round((top_ten_tld_sites / total_sites * 100), decimals=0))
 
     d['oa_pc_increase_sites'] = int(np.round((tld.OATotal.sum() / tld.nonOATotal.sum() *
-                                               100 * ratio - 100), decimals=0))
+                                              100 * ratio - 100), decimals=0))
 
-    d['num_countries_oa_books'] = int(usage[usage.is_oa==True].iso_a3.nunique())
+    d['num_countries_oa_books'] = int(usage[usage.is_oa == True].iso_a3.nunique())
     d['num_countries_noa_books'] = int(usage[usage.is_oa == False].iso_a3.nunique())
 
     for f in af.generate_file('text_data.json'):
@@ -394,6 +410,7 @@ def figure_comparisons(af, usage, cites, webo):
     af.add_existing_file('figure1b.png', remove=True)
     plt.close()
     combine_panels(af, 'figure1a.png', 'figure1b.png', 'figure1full.png')
+
 
 def figure_downloads_by_time(af, usage):
     # Group and calculate summary statistics
@@ -498,6 +515,10 @@ def scatter_chapters(af, usage, chapters):
     af.add_existing_file('chapters_usage_scatter.png', remove=True)
     plt.close()
 
+    dist = figdata[['Number of Chapters', 'Downloads per Month', 'Open Access']]
+    dist.to_csv('chapter-usage-distribution.csv')
+    af.add_existing_file('chapter-usage-distribution.csv', remove=True)
+
     figdata['Number of Pages'] = figdata['nr_of_arabic_pages']
     downloadsvpages = sns.lmplot(x='Number of Pages',
                                  y='Downloads per Month',
@@ -510,6 +531,9 @@ def scatter_chapters(af, usage, chapters):
     af.add_existing_file('pages_usage_scatter.png', remove=True)
     plt.close()
 
+    dist = figdata[['Number of Pages', 'Downloads per Month', 'Open Access']]
+    dist.to_csv('pages-usage-distribution.csv')
+    af.add_existing_file('pages-usage-distribution.csv', remove=True)
 
 def tld_table(af, tld):
     table_headers = [
@@ -567,7 +591,8 @@ def tld_bar(af, tld, usage):
 
     figdata = pd.DataFrame(dflist)
     panel = sns.barplot(x='Top Level Domain', y='Number of sites per book',
-                        hue='Open Access', hue_order=[True, False], palette=['orange', 'blue'], data=figdata)
+                        hue='Open Access', hue_order=[True, False], palette=['#00DDA8', '#000033'],
+                        data=figdata)
     panel.get_figure().savefig('tld_bar.png')
     af.add_existing_file('tld_bar.png', remove=True)
     plt.close()
@@ -580,7 +605,7 @@ def tld_bar(af, tld, usage):
 def map_oa_noa(af, mapdata):
     panel = map_compare(mapdata, ['Total OA Book Downloads', 'Total Non-OA Book Downloads'],
                         vmin=1, vmax=10000000,
-                        panel_titles=True,
+                        panel_titles=True, cmap=coardmap,
                         legend_kwds={'label': 'Downloads',
                                      'orientation': "horizontal"})
     panel.savefig('map_oa_noa.png')
@@ -600,7 +625,8 @@ def map_oa_noa(af, mapdata):
 def av_downloads(af, usage, world):
     oa_download = usage[usage.is_oa == True].groupby(['iso_a3']).sum()['downloads'].to_frame().reset_index().set_index(
         'iso_a3')
-    noa_download = usage[usage.is_oa == False].groupby(['iso_a3']).sum()['downloads'].to_frame().reset_index().set_index(
+    noa_download = usage[usage.is_oa == False].groupby(['iso_a3']).sum()[
+        'downloads'].to_frame().reset_index().set_index(
         'iso_a3')
 
     oa_download_perbook = oa_download.div(usage[usage['is_oa'] == True]['isbn'].nunique())
@@ -614,11 +640,11 @@ def av_downloads(af, usage, world):
     figdata['Average downloads per non-OA book'] = figdata.downloads_noa.fillna(0)
 
     panel = map_compare(figdata, ['Average downloads per OA book', 'Average downloads per non-OA book'],
-                figsize=(12, 12),
-                vmin=1, vmax=mapdata['downloads'].max(),
-                panel_titles=True,
-                legend_kwds={'label': 'Downloads',
-                             'orientation': "horizontal"})
+                        figsize=(12, 12),
+                        vmin=1, vmax=mapdata['downloads'].max(),
+                        panel_titles=True, cmap=coardmap,
+                        legend_kwds={'label': 'Downloads',
+                                     'orientation': "horizontal"})
 
     panel.savefig('av_downloads.png')
     af.add_existing_file('av_downloads.png', remove=True)
@@ -648,7 +674,7 @@ def anonymous_where_no_logged(af, usage, world):
 
     panel = map_compare(figdata, ['Anonymous downloads from countries having no logged downloads'],
                         figsize=(12, 6),
-                        panel_titles=False,
+                        panel_titles=False, cmap=coardmap,
                         legend_kwds={'label': 'Anonymous downloads',
                                      'orientation': "horizontal"})
     panel.savefig('anon_where_no_logged.png')
@@ -684,7 +710,7 @@ def anon_v_logged(af, usage, world):
                                   'Anonymous access downloads'],
                         figsize=(12, 12),
                         vmin=1, vmax=mapdata['downloads_anon'].max(),
-                        panel_titles=True,
+                        panel_titles=True, cmap=coardmap,
                         legend_kwds={'label': 'Downloads',
                                      'orientation': "horizontal"})
     panel.savefig('anon_v_logged.png')
@@ -708,7 +734,7 @@ def africa_title_effect(af, usage, continents, world):
                             ['Increase in downloads of all books with Africa in the title',
                              'Increase in downloads of OA books with Africa in the title',
                              'Increase in downloads of Non-OA books with Africa in the title'],
-                            continents, usage, world, colornorm=colors.Normalize)
+                            continents, usage, world, colornorm=colors.Normalize, cmap=coardmap)
 
     panel.savefig('africa_title_effect.png')
     af.add_existing_file('africa_title_effect.png', remove=True)
@@ -730,7 +756,7 @@ def latam_title_effect(af, usage, continents, world):
                             ['Increase in downloads of all books with Latin America in the title',
                              'Increase in downloads of OA books with Latin America in the title',
                              'Increase in downloads of Non-OA books with Latin America in the title'],
-                            continents, usage, world)
+                            continents, usage, world, cmap=coardmap)
 
     panel.savefig('latam_title_effect.png')
     af.add_existing_file('latam_title_effect.png', remove=True)
@@ -746,13 +772,14 @@ def latam_title_effect(af, usage, continents, world):
     af.add_existing_file('latam_title_effect_lilac.png', remove=True)
     plt.close()
 
+
 def usage_normal_by_pubs(af, usage, world, normal):
     pubs = normal.set_index('iso_a3')
     oa_download = usage[usage.is_oa == True].groupby(['iso_a3']).agg(
-        downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+        downloads=pd.NamedAgg(column='downloads', aggfunc='sum')
     )
     noa_download = usage[usage.is_oa == False].groupby(['iso_a3']).agg(
-        downloads = pd.NamedAgg(column='downloads', aggfunc='sum')
+        downloads=pd.NamedAgg(column='downloads', aggfunc='sum')
     )
     oa_effect = oa_download['downloads'].div(pubs['Publications']).div(usage[usage['is_oa'] == True]['isbn'].nunique())
     noa_effect = noa_download['downloads'].div(pubs['Publications']).div(
@@ -773,12 +800,13 @@ def usage_normal_by_pubs(af, usage, world, normal):
     panel = map_compare(figdata, ['OA book downloads normalized by publication',
                                   'Non-OA book downloads normalized by publication'],
                         figsize=(12, 12),
-                        panel_titles=True,
+                        panel_titles=True, cmap=coardmap,
                         legend_kwds={'label': 'Downloads',
                                      'orientation': "horizontal"})
     panel.savefig('norm_downloads.png')
     af.add_existing_file('norm_downloads.png', remove=True)
     plt.close()
+
 
 ##############
 # Case Study #
@@ -874,7 +902,7 @@ def casestudy_advantage_map(isbn, usage, world, af):
     figdata['Book downloads normalized by publication'] = figdata.downloads.fillna(1)
     panel = map_compare(figdata, ['Book downloads normalized by publication'],
                         xlim=(-20, 55), ylim=(-35, 38),
-                        panel_titles=False,
+                        panel_titles=False, cmap=coardmap,
                         legend_kwds={'label': 'Increase in usage',
                                      'orientation': "horizontal"})
 
@@ -891,6 +919,7 @@ def casestudy_advantage_map(isbn, usage, world, af):
     panel.savefig('case_study_advantage_map_lilac.png')
     af.add_existing_file('case_study_advantage_map_lilac.png', remove=True)
     plt.close()
+
 
 def casestudy_countrytable(isbn, usage, focus_country, af):
     countries_all = usage.groupby('iso_a3').agg(
@@ -957,15 +986,15 @@ def top_panel(chart_type,
                              height=4, aspect=2)
     if hue:
         figpanel.map(chart_type, x, y,
-                     hue, hue_order=hue_order, palette=['darkorange', 'blue'], **kwargs)
+                     hue, hue_order=hue_order, palette=['#00DDA8', '#000033'], **kwargs)
         figpanel.add_legend(labels=['Open Access', 'Not Open Access'])
     elif 'color' in kwargs.keys():
         figpanel.map(chart_type, x, y, **kwargs)
     else:
-        figpanel.map(chart_type, x, y, palette=['darkorange', 'blue'], **kwargs)
+        figpanel.map(chart_type, x, y, palette=['#00DDA8', '#000033'], **kwargs)
 
-    figpanel.add_legend({'Open Access': Line2D([0], [0], color='darkorange', lw=8),
-                         'Not Open Access': Line2D([0], [0], color='blue', lw=8)})
+    figpanel.add_legend({'Open Access': Line2D([0], [0], color='#00DDA8', lw=8),
+                         'Not Open Access': Line2D([0], [0], color='#000033', lw=8)})
     return figpanel
 
 
@@ -984,12 +1013,12 @@ def grid_panel(chart_type,
                              height=3.5)
     if hue:
         figpanel.map(chart_type, x, y,
-                     hue, hue_order=hue_order, palette=['darkorange', 'blue'],
+                     hue, hue_order=hue_order, palette=['#00DDA8', '#000033'],
                      **kwargs)
     elif 'color' in kwargs.keys():
         figpanel.map(chart_type, x, y, **kwargs)
     else:
-        figpanel.map(chart_type, x, y, palette=['darkorange', 'blue'],
+        figpanel.map(chart_type, x, y, palette=['#00DDA8', '#000033'],
                      **kwargs)
 
     for ax in figpanel.axes.flat:

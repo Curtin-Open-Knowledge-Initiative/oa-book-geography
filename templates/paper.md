@@ -45,7 +45,8 @@ The main findings of our analysis are:
 * OA books have increased access and usage for under-served populations and low or middle income countries, including a high number of countries from Africa.
 * OA books as a group have {{ text_data.oa_times_more_downloads }} times more downloads than non-OA books and {{ text_data.oa_times_more_citations }} the number of citations.
 * There is higher (at least 2.7-fold) usage (via downloads) of OA books across every stratum in our sample. That is for every type of book, every discipline, and each of the three years of publication in the sample, OA books show more usage than their non-OA comparison groups. This holds for every month after publication and for alternate categories such as imprints.
-* Books that contain the name of a country or region in their title generally show enhanced usage in that country or region. This effect is clearest for Latin America and Africa and is greater for OA titles.
+* Books that contain the name of a country or region in their title generally show increased usage in that country or 
+  region. This effect is clearest for Latin America and Africa and is greater for OA titles.
 * Anonymous downloads are generally around double that of logged downloads. This means reporting that relies on institutional identification will be substantially undercounting the usage of OA books.
 
 These findings are important for stakeholders by providing a robust understanding of the benefits of publishing books in OA forms. They give support to evidence-based publishing and marketing strategies for publishers. They also equip authors with enhanced knowledge for making decisions about publishing venues, formats and titles, etc. It is our hope that these findings will facilitate the advancement towards a greater diversity of readership and accessibility.
@@ -151,24 +152,38 @@ to the overall usage of each book. A lower Gini coefficient means more diverse u
 and the 95% confidence interval is shown. For the corpus as a whole and for every category, the median Gini 
 coefficient of OA books is lower, meaning that the geographical usage of OA books is more diverse (i.e. less unequal).
 
-### Open access books show enhanced title effect on geographic usage
+### Open access books associated with a larger title effect on geographic usage
 
 Approximately 16% of the whole corpus of books in this study had a region or country name in their title or subtitle. The proportion of OA vs non-OA books with a geographic reference in the title is approximately the same. We hand coded title-references to countries or regions, including variations referring to language (e.g. “Chinese”) and regions (“Africa”, “Latin America” as well as possessives such as “Sub-saharan” and “Latin American”) and examined the usage from those regions focusing on Africa and Latin America as examples. We are interested in discovering whether there is a “title” effect, i.e., a book with title referencing a region shows greater usage in that region, and if this effect differs across OA and non-OA books.
 
 The proportional increases in downloads for books referencing “Africa” in their titles are presented in Figure 6. The three panels show download patterns for all books, OA books and non-OA books, respectively. Parallel visualisations for books referencing “Latin America” are provided in Figure S2 of the Appendix.
 
-For Africa and Latin America we see substantial enhanced usage overall from those regions featuring in the title. In both cases there is also some evidence of enhanced usage in some parts of the other region (i.e. enhanced usage in a small number of African countries for titles that have Latin America in the title). In the case of books with “Africa” in the title there is enhanced Latin America usage in Guyana, Suriname, Venezuela, and Panama. Other countries with enhanced usage are Laos, the Solomon Islands and Timor Leste.
+For Africa and Latin America we see substantial increase in usage overall from those regions featuring in the title. In 
+both cases there is also some evidence of increased usage in some parts of the other region (e.g. increased usage in a 
+small number of African countries for titles that have Latin America in the title). In the case of books with 
+“Africa” in the title there is increased Latin America usage in Guyana, Suriname, Venezuela, and Panama. Other 
+countries with increased usage are Laos, the Solomon Islands and Timor Leste.
 
-The size of the geographic effect is strongly enhanced by OA. OA books about Africa are widely read beyond Africa as well as in Africa. There is a very large enhancement of usage compared to the whole sample across the African continent. By contrast, non-OA books with “Africa” in the title show a usage enhancement only in South Africa, Uganda, Ethiopia and Sudan. Not only does OA enhance usage in countries under-represented in global scholarship, it also enhances the global usage of scholarship about under-represented countries. See Case study in the Appendix for an example of the enhancement of usage for a book with a specific country in the title.
+The size of this geographic title effect is substantially larger for books that are OA. OA books about Africa are 
+widely read beyond Africa as well as in Africa. There is a very large increase in usage compared to the whole sample 
+across the African continent. By contrast, non-OA books with “Africa” in the title show a usage increase only in South 
+Africa, Uganda, Ethiopia and Sudan. Not only is OA associated with increased usage in countries under-represented in 
+global scholarship, it also associated with increased global usage of scholarship about under-represented 
+countries. See Case study in the Appendix for an example of the enhancement of usage for a book with a specific country in the title.
 
-Similar effects are seen for Latin America, although the enhancement is not quite as localised as in the case of Africa. Usage in Latin America is strongly enhanced for all books with ‘Latin America” (including variations and possessives such as “Latin American”) in the title and the degree of enhancement is substantially stronger for OA books. In addition there is broader enhancement of usage internationally for the OA books. The overall enhancement effect is larger for books with “Latin America” (maximum enhancement of 100 times more usage) than it is for “Africa” (maximum enhancement of 5-fold).
+Similar effects are seen for Latin America, although the enhancement is not quite as localised as in the case of 
+Africa. Usage in Latin America is substantially greater for all books with ‘Latin America” (including variations and 
+possessives such as “Latin American”) in the title. The size of this increase is 
+substantially larger for OA books. In addition, there is broader usage internationally for the OA books. 
+The overall effect is larger for books with “Latin America” (maximum of 100 times more usage) than it is for 
+“Africa” (maximum increase of 5-fold).
 
 ![](africa_title_effect.png)
 
 _Figure 6 Increases in usage for books with “Africa” in the title._ Overall usage for each country of books 
 with “Africa” in the title was divided by usage for that country for the full corpus. Increases in usage are 
 shown with countries showing unchanged or decreased usage displayed in the lightest shades. OA books show 
-relatively more increase across a range of countries, with the enhancement concentrated in Africa.
+relatively more increase across a range of countries, with the increase concentrated in Africa.
 
 ### Anonymous usage versus logged usage
 
@@ -217,7 +232,8 @@ In some cases usage numbers are small and this can exaggerate the effects seen w
 usage. The precise size of geographic effects and to some extent the ordering should therefore not be relied 
 on. However the broad patterns of change and directions of effect are robust and the broad geographic patterns 
 of changes in usage are consistent across various subsamples and for individual books. Overall we are highly 
-confident of the claim that OA enhances usage in countries which suffer exclusion from scholarly discourse.
+confident of the claim that OA is associated with increased usage in countries which suffer exclusion from scholarly 
+discourse.
 
 The webometric analysis is reliant on construction of a search term that combines the title with author names. 
 This can be expected to experience false negatives (not all web pages referring to the book will contain 
@@ -260,7 +276,7 @@ _Figure S1: Downloads normalised by publication count per country._ This figure 
 _Figure S2: Increases in usage for books with “Latin America” in the title._ Overall usage for each country of 
 books with “Latin America” in the title was divided by usage for that country for the full corpus. Increases 
 in usage are shown on a log scale, with countries showing unchanged or decreased usage displayed in white. 
-OA books show relatively more increase across a range of countries, with the enhancement concentrated in Latin 
+OA books show relatively more increase across a range of countries, with the increases concentrated in Latin 
 America. 
 
 ![](anon_v_logged.png)
@@ -367,12 +383,12 @@ certain country). Where appropriate, 95% confidence intervals are also provided.
 measure the geographic diversity of downloads by the approach of 
 https://zhiyzuo.github.io/Plot-Lorenz/.
 
-Length of a book can be a potential factor for its level of usage. In particular, we would like to examine whether 
+Length of a book can be a potential factor for its level of usage and is a particular issue in this case due to the way in which full book downloads are transformed into the chapter downloads that we analyse. We therefore examine whether 
 there is a bias caused by book length when comparing usages of OA and non-OA books. To examine whether the length 
 of a book has a confounding effect on usage patterns we plot the length of books against the number of downloads. 
 We consider the length of the book in terms of number of pages and number of chapters separately. These are 
 presented in Figures S5 and S6 below, with OA and non-OA titles shown in different colours. The figures show while 
-there is a relationship between length and number of downloads, this effect seems similar across OA and non-OA books.
+there is a relationship between length and number of downloads, the difference in usage between OA and non-OA books is robust to this effect. In particular there is a constant increase in usage across the length range for OA over non-OA books.
 
 ![](pages_usage_scatter.png)
 
@@ -381,6 +397,8 @@ _Figure S5: Scatterplot for downloads versus number of pages for each title for 
 ![](chapters_usage_scatter.png)
 
 _Figure S6: Scatterplot for downloads versus number of chapters for each title for OA and non-OA books._
+
+
 
 ### Data processing, analysis and visualisation
 
@@ -405,9 +423,17 @@ Case Study
 
 #### Geographical reach
 
-Given the title and focus of the book it is naturally of interest to identify whether this Open Access volume shows enhanced usage in Kenya. In the context of African usage, Kenya is a significant user of both closed and Open Access books having usage in a similar range of South Africa for closed books. However Digital Kenya shows a substantially higher proportion of its usage from Kenya. This usage is sustained over the whole period of data collection and is most obvious for anonymous usage.
+Given the title and focus of the book it is naturally of interest to identify whether this Open Access volume shows 
+increased usage in Kenya. In the context of African usage, Kenya is a significant user of both closed and Open Access 
+books having usage in a similar range of South Africa for closed books. However Digital Kenya shows a substantially higher proportion of its usage from Kenya. This usage is sustained over the whole period of data collection and is most obvious for anonymous usage.
 
-Other African countries also show enhanced proportional usage with Nigeria, Ghana and South Africa showing the strongest effects. There is also evidence of a greater proportion of overall usage from Indonesia and India, potentially relating to the wider relevance of the issues discussed beyond Kenya and neighbouring countries. Interestingly the effect for Indonesia seems to be stronger for logged usage, which may be a suggestion of Open Access driving enhanced usage, even for those books where specific audiences might have access. Further analysis might address the question of whether specific areas showing enhanced usage would be likely to have had access if the book were not Open Access but otherwise the same.
+Other African countries also show greater proportional usage with Nigeria, Ghana and South Africa showing the 
+strongest effects. There is also evidence of a greater proportion of overall usage from Indonesia and India, 
+potentially relating to the wider relevance of the issues discussed beyond Kenya and neighbouring countries. 
+Interestingly the effect for Indonesia seems to be stronger for logged usage, which may be a suggestion of Open 
+Access driving enhanced usage, even for those books where specific audiences might have access. Further analysis 
+might address the question of whether specific areas showing increased usage would be likely to have had access if the 
+book were not Open Access but otherwise the same.
 
 ![](case_study_advantage_map.png)
 ![](city-Digital_Kenya_v2.png)
