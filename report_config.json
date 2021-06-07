@@ -12,9 +12,6 @@
   ],
   "templates": ["paper.md"],
   "filters": [
-    [
-      "pandoc",
-      "docx"
-    ]
+    ["pandoc", "docx"]
   ]
 }
