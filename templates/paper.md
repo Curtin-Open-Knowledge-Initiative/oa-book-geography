@@ -117,7 +117,7 @@ Evidently the usage (via downloads) of both non-OA and OA books is international
 
 An important aspect to consider is the role of population size in the geographical patterns of usage. One challenge with the analysis of academic usage is to identify a good proxy of “academic population size”. Examples of this include normalisation by the country’s number of people in tertiary education, overall academic output size and total number of citations. We provide one such example through normalising the downloads by total number of publications (see Appendix for details on this data). This is visualised in Figure S1 of the Appendix.
 
-While total publication size may not be a perfect proxy for all potential academic usages of the books, this normalisation suggests that “usage per academic work” for both OA and non-OA books is fairly consistent across North America and North Western Europe (as well as mainland China, South Africa and Australia). Focusing on other geographical regions, and consistent with the overall download counts (see Figure S1), Egypt emerges as a heavy user of non-OA content relative to overall academic outputs, along with Uruguay, Ethiopia and Uzbekistan. Relatively heavy users of OA content relative to academic output size include Somalia, Afghanistan, Bhutan, Niger and South Sudan.
+While total publication size is not a perfect proxy for the number of potential academic readers of the books, this normalisation suggests that “usage per academic work” for both OA and non-OA books is fairly consistent across North America and North Western Europe (as well as mainland China, South Africa and Australia). Focusing on other geographical regions, and consistent with the overall download counts (see Figure S1), Egypt emerges as a heavy user of non-OA content relative to overall academic outputs, along with Uruguay, Ethiopia and Uzbekistan. Relatively heavy users of OA content relative to academic output size include Somalia, Afghanistan, Bhutan, Niger and South Sudan.
 
 
 ![](av_downloads.png)
@@ -140,9 +140,12 @@ Asia. Countries with low GDP and development are significantly represented in th
 
 ### Open access books show higher diversity of usage
 
-While we have provided evidence for wider usage of OA books (i.e., more countries download OA books), it is also important to understand the level of disparity amongst country usages. We can provide a more quantitative measure of this effect by examining a disparity index. That is, how much usage deviates from the situation where all countries show even usage. The Gini coefficient is a disparity index that is often used to define levels of income inequality. We can use the same calculation to measure inequalities in geographical usage and use this to compare OA and non-OA books. A lower Gini coefficient indicates more diverse usage. That is, lower inequality. The Gini coefficient is calculated for every book in our sample. Figure 5 shows a summary of these results for OA and non-OA books overall, and for different combinations of book type and discipline cluster.
+While we have provided evidence for wider usage of OA books (i.e., more countries download OA books), it is also important to understand the level of disparity amongst country usage. We can provide a more quantitative measure of this effect by examining a disparity index. That is, how much usage deviates from the situation where all countries show even usage. The Gini coefficient is a disparity index that is often used to define levels of income inequality. We can use the same calculation to measure inequalities in geographical usage and use this to compare OA and non-OA books. A lower Gini coefficient indicates more diverse usage. That is, lower inequality. The Gini coefficient is calculated for every book in our sample. Figure 5 shows a summary of these results for OA and non-OA books overall, and for different combinations of book type and discipline cluster.
 
-For the overall corpus and for every individual category the usage by country is substantially more diverse for OA books. This form of analysis may be useful in identifying books that have significant potential to reach diverse geographic audiences. It might also be interesting to examine whether a low Gini coefficient for a non-OA book suggests potential for substantially enhanced usage if the book were converted to OA. It should be noted that there exist outliers amongst both OA and non-OA books in terms of their values in the Gini coefficient. In particular, there are exceptional books in both categories that may have broad interest (e.g., *A Theory of Philosophical Fallacies*) or narrow geographical focus (e.g., *A History of Male Psychological Disorders In Britain, 1945-1980*).
+For the overall corpus, and for every individual category, the usage by country is substantially more diverse for OA 
+books. This form of analysis may be useful in identifying books that have significant potential to reach diverse 
+geographic audiences. It might also be interesting to examine whether a low Gini coefficient for a non-OA book 
+suggests potential for substantially enhanced usage if the book were converted to OA. It should be noted that there are outliers amongst both OA and non-OA books in terms of their values in the Gini coefficient. In particular, there are exceptional books in both categories that may have broad interest (e.g., *A Theory of Philosophical Fallacies*) or narrow geographical focus (e.g., *A History of Male Psychological Disorders In Britain, 1945-1980*).
 
 ![](figure_gini_full.png)
 
@@ -154,12 +157,14 @@ coefficient of OA books is lower, meaning that the geographical usage of OA book
 
 ### Open access books associated with a larger title effect on geographic usage
 
-Approximately 16% of the whole corpus of books in this study had a region or country name in their title or subtitle. The proportion of OA vs non-OA books with a geographic reference in the title is approximately the same. We hand coded title-references to countries or regions, including variations referring to language (e.g. “Chinese”) and regions (“Africa”, “Latin America” as well as possessives such as “Sub-saharan” and “Latin American”) and examined the usage from those regions focusing on Africa and Latin America as examples. We are interested in discovering whether there is a “title” effect, i.e., a book with title referencing a region shows greater usage in that region, and if this effect differs across OA and non-OA books.
+Approximately 16% of the whole corpus of books in this study had a region or country name in their title or subtitle.
+The proportion of OA vs non-OA books with a geographic reference in the title is approximately the same. We hand 
+coded title-references to countries or regions, including variations referring to language (e.g. “Chinese”) and regions (“Africa”, “Latin America” as well as possessives such as “Sub-saharan” and “Latin American”) and examined the usage from those regions focusing on Africa and Latin America as examples. We are interested in discovering whether there is a “title” effect, i.e., a book with a title referencing a region shows greater usage in that region, and if this effect differs across OA and non-OA books.
 
 The proportional increases in downloads for books referencing “Africa” in their titles are presented in Figure 6. The three panels show download patterns for all books, OA books and non-OA books, respectively. Parallel visualisations for books referencing “Latin America” are provided in Figure S2 of the Appendix.
 
-For Africa and Latin America we see substantial increase in usage overall from those regions featuring in the title. In 
-both cases there is also some evidence of increased usage in some parts of the other region (e.g. increased usage in a 
+For Africa and Latin America we see a substantial increase in usage overall from those regions featuring in the title.
+In both cases there is also some evidence of increased usage in some parts of the other region (e.g. increased usage in a 
 small number of African countries for titles that have Latin America in the title). In the case of books with 
 “Africa” in the title there is increased Latin America usage in Guyana, Suriname, Venezuela, and Panama. Other 
 countries with increased usage are Laos, the Solomon Islands and Timor Leste.
