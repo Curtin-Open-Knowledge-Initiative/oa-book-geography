@@ -149,7 +149,7 @@ suggests potential for substantially enhanced usage if the book were converted t
 
 ![](figure_gini_full.png)
 
-_Figure 5_ Diversity of book usage amongst countries as measured by the Gini coefficient.* The Gini coefficient 
+_Figure 5: Diversity of book usage amongst countries as measured by the Gini coefficient._ The Gini coefficient 
 is a statistical measure of inequality. Here the coefficient is calculated for the contribution of each country 
 to the overall usage of each book. A lower Gini coefficient means more diverse usage. The median Gini coefficient 
 and the 95% confidence interval is shown. For the corpus as a whole and for every category, the median Gini 
@@ -185,7 +185,7 @@ The overall effect is larger for books with “Latin America” (maximum of 100 
 
 ![](africa_title_effect.png)
 
-_Figure 6 Increases in usage for books with “Africa” in the title._ Overall usage for each country of books 
+_Figure 6: Increases in usage for books with “Africa” in the title._ Overall usage for each country of books 
 with “Africa” in the title was divided by usage for that country for the full corpus. Increases in usage are 
 shown with countries showing unchanged or decreased usage displayed in the lightest shades. OA books show 
 relatively more increase across a range of countries, with the increase concentrated in Africa.
